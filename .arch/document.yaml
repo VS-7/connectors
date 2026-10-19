@@ -1,0 +1,35 @@
+# Metadados do documento de requisitos (docs/documento-de-requisitos.md).
+# Só os textos que não existem em outro lugar do projeto; o resto é gerado.
+title: Documento de Requisitos — Universal LLM Connectors Hub
+version: "1.0"
+date: "2026-10-18"
+authors:
+  - Vitor Sergio
+client: Hub de conectores universais em Go para automação agêntica, integrando assistentes cognitivos e LLMs (Claude Code, Antigravity CLI, OpenAI, Spark, Codex) aos canais de comunicação, produtividade e reuniões (Fathom, WhatsApp, Slack, Mattermost, Google Drive e Gmail) com o Second Brain (OS-Optimizer-Playbook).
+users: Agentes autônomos de IA, desenvolvedores e operadores humanos de Second Brain / AI OS interagindo através de protocolos padronizados (MCP stdio/SSE e REST OpenAI Function Calling).
+introduction: O Universal LLM Connectors Hub resolve o problema de fragmentação de ferramentas em ecossistemas de IA. Através da Arquitetura Hexagonal (Ports & Adapters), separa completamente os contratos de ferramentas (Tools) dos protocolos de transporte (MCP e OpenAI Tools Gateway) e das APIs de terceiros. Isso garante reutilização de 100% dos conectores em qualquer cliente de IA, com controle rígido de token budget, segurança de canais I/O e ativação seletiva.
+history:
+  - date: "2026-10-18"
+    version: "1.0"
+    description: Especificação e planejamento arquitetural com ArchCode Studio e OS-Optimizer-Playbook.
+    author: Vitor Sergio
+references:
+  - Model Context Protocol (MCP) Specification (JSON-RPC 2.0 / stdio / SSE)
+  - OpenAI Function Calling / Tool Calling JSON Schema Specification (Draft 7)
+  - Alistair Cockburn — Hexagonal Architecture (Ports and Adapters Pattern)
+  - mark3labs/mcp-go — Go implementation of the Model Context Protocol
+  - Second Brain & AI OS Playbook (OS-Optimizer-Playbook)
+glossary:
+  - term: MCP
+    definition: Model Context Protocol, protocolo aberto de comunicação JSON-RPC para modelos de linguagem compartilharem contexto e ferramentas.
+  - term: Function Calling / Tool Calling
+    definition: Capacidade de LLMs estruturarem chamadas de funções baseadas em JSON Schema, executadas por agentes ou gateways.
+  - term: Hexagonal Architecture
+    definition: Arquitetura Ports & Adapters que isola o núcleo de domínio das dependências externas e de transporte.
+  - term: Super-Server
+    definition: Binário único compilado em Go capaz de expor múltiplos conectores selecionáveis sob uma única interface stdio/SSE ou HTTP.
+  - term: Token Budget
+    definition: Prática de truncar e resumir DTOs retornados por conectores para evitar estourar a janela de contexto ou degradar o raciocínio do modelo.
+  - term: Second Brain / AI OS
+    definition: Sistema operacional cognitivo local baseado em Markdown e automações agênticas (OS-Optimizer-Playbook).
+

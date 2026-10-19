@@ -1,0 +1,155 @@
+{
+  "id": "casos-de-uso",
+  "kind": "usecase",
+  "name": "Casos de Uso — Universal LLM Connectors",
+  "description": "Gerado a partir das fichas em docs/casos-de-uso.",
+  "version": "1.0.0",
+  "last_modified": "2026-10-19T01:15:00Z",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "elements": [
+    {
+      "id": "el-connectors",
+      "type": "boundary",
+      "name": "connectors",
+      "position": {
+        "x": 260,
+        "y": 40
+      }
+    },
+    {
+      "id": "el-cdu001",
+      "type": "usecase",
+      "name": "Executar Ferramenta via MCP",
+      "position": {
+        "x": 380,
+        "y": 80
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU001"
+    },
+    {
+      "id": "el-cdu002",
+      "type": "usecase",
+      "name": "Executar Ferramenta via OpenAI Gateway",
+      "position": {
+        "x": 380,
+        "y": 160
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU002"
+    },
+    {
+      "id": "el-cdu003",
+      "type": "usecase",
+      "name": "Ingerir Reunião do Fathom no Second Brain",
+      "position": {
+        "x": 380,
+        "y": 240
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU003"
+    },
+    {
+      "id": "el-cdu004",
+      "type": "usecase",
+      "name": "Comunicação via WhatsApp, Slack e Mattermost",
+      "position": {
+        "x": 380,
+        "y": 320
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU004"
+    },
+    {
+      "id": "el-cdu005",
+      "type": "usecase",
+      "name": "Pesquisar Documentos e E-mails no Google Workspace",
+      "position": {
+        "x": 380,
+        "y": 400
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU005"
+    },
+    {
+      "id": "el-cdu006",
+      "type": "usecase",
+      "name": "Inicializar Hub com Ativação Seletiva",
+      "position": {
+        "x": 380,
+        "y": 480
+      },
+      "parent_id": "el-connectors",
+      "use_case": "CDU006"
+    },
+    {
+      "id": "el-mcp-client",
+      "type": "actor",
+      "name": "Cliente MCP",
+      "position": {
+        "x": 40,
+        "y": 80
+      }
+    },
+    {
+      "id": "el-http-client",
+      "type": "actor",
+      "name": "Cliente OpenAI Gateway",
+      "position": {
+        "x": 40,
+        "y": 180
+      }
+    },
+    {
+      "id": "el-second-brain-operator",
+      "type": "actor",
+      "name": "Operador / Agente Second Brain",
+      "position": {
+        "x": 40,
+        "y": 340
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-1",
+      "type": "association",
+      "source": "el-mcp-client",
+      "target": "el-cdu001"
+    },
+    {
+      "id": "rel-2",
+      "type": "association",
+      "source": "el-http-client",
+      "target": "el-cdu002"
+    },
+    {
+      "id": "rel-3",
+      "type": "association",
+      "source": "el-second-brain-operator",
+      "target": "el-cdu003"
+    },
+    {
+      "id": "rel-4",
+      "type": "association",
+      "source": "el-second-brain-operator",
+      "target": "el-cdu004"
+    },
+    {
+      "id": "rel-5",
+      "type": "association",
+      "source": "el-second-brain-operator",
+      "target": "el-cdu005"
+    },
+    {
+      "id": "rel-6",
+      "type": "association",
+      "source": "el-second-brain-operator",
+      "target": "el-cdu006"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+%% Gerado automaticamente pelo ArchCode Studio a partir de .arch/diagrams/usecase/casos-de-uso.json
+%% Casos de Uso — Casos de uso
+flowchart LR
+    cliente_mcp["👤 Cliente MCP"]
+    cliente_http["👤 Cliente OpenAI Gateway"]
+    operador_second_brain["👤 Operador / Agente Second Brain"]
+
+    subgraph connectors["connectors"]
+        cdu001(["Executar Ferramenta via MCP"])
+        cdu002(["Executar Ferramenta via OpenAI Gateway"])
+        cdu003(["Ingerir Reunião do Fathom no Second Brain"])
+        cdu004(["Comunicação via WhatsApp, Slack e Mattermost"])
+        cdu005(["Pesquisar Documentos e E-mails no Google Workspace"])
+        cdu006(["Inicializar Hub com Ativação Seletiva"])
+    end
+
+    cliente_mcp --- cdu001
+    cliente_http --- cdu002
+    operador_second_brain --- cdu003
+    operador_second_brain --- cdu004
+    operador_second_brain --- cdu005
+    operador_second_brain --- cdu006

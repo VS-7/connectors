@@ -1,0 +1,47 @@
+%% Gerado automaticamente pelo ArchCode Studio a partir de .arch/diagrams/macro.json
+%% Não edite manualmente enquanto o servidor estiver rodando: as alterações serão sobrescritas.
+flowchart LR
+    node_llm_clients(["LLM & Agent Clients<br/><small>Claude / Antigravity / Codex / Spark</small>"])
+    node_omni_mcp{{"Omni MCP Server<br/><small>Go 1.23 / mark3labs/mcp-go</small>"}}
+    node_omni_http{{"Omni HTTP Gateway<br/><small>Go 1.23 / net/http</small>"}}
+    node_core_hub["Core Connectors Hub<br/><small>Go 1.23 / Hexagonal Ports</small>"]
+    node_conn_fathom["Fathom Connector<br/><small>Go / Fathom Client</small>"]
+    node_conn_whatsapp["WhatsApp Connector<br/><small>Go / whatsmeow / Evolution</small>"]
+    node_conn_slack["Slack Connector<br/><small>Go / slack-go</small>"]
+    node_conn_mattermost["Mattermost Connector<br/><small>Go / mattermost-server model</small>"]
+    node_conn_google["Google Workspace Connector<br/><small>Go / google.golang.org/api</small>"]
+    node_ext_fathom[["Fathom Video API<br/><small>HTTPS REST API</small>"]]
+    node_second_brain[/"OS-Optimizer Second Brain<br/><small>Markdown Vault / AI OS</small>"/]
+    node_sqlite_session[("SQLite Session Store<br/><small>SQLite 3 / Local</small>")]
+    node_ext_slack[["Slack Web API<br/><small>HTTPS REST API</small>"]]
+    node_ext_mattermost[["Mattermost Server API<br/><small>Client4 REST API</small>"]]
+    node_ext_google[["Google Cloud APIs<br/><small>Gmail & Drive REST</small>"]]
+    node_llm_clients -->|"rest :8080"| node_omni_http
+    node_llm_clients -->|"websocket"| node_omni_mcp
+    node_core_hub -->|"rest"| node_conn_fathom
+    node_core_hub -->|"rest"| node_conn_google
+    node_core_hub -->|"rest"| node_conn_mattermost
+    node_core_hub -->|"rest"| node_conn_slack
+    node_core_hub -->|"sql"| node_sqlite_session
+    node_core_hub -->|"rest"| node_conn_whatsapp
+    node_conn_fathom -->|"rest :443"| node_ext_fathom
+    node_conn_fathom -->|"rest"| node_second_brain
+    node_conn_google -->|"rest :443"| node_ext_google
+    node_omni_http -->|"rest"| node_core_hub
+    node_conn_mattermost -->|"rest :443"| node_ext_mattermost
+    node_omni_mcp -->|"rest"| node_core_hub
+    node_conn_slack -->|"rest :443"| node_ext_slack
+    node_conn_whatsapp -->|"sql"| node_sqlite_session
+
+    classDef client fill:#2b2b3f,stroke:#94a3b8,color:#eef2f7
+    class node_llm_clients client
+    classDef compute fill:#1e3a5f,stroke:#3b82f6,color:#e6f0ff
+    class node_conn_fathom,node_conn_google,node_conn_mattermost,node_conn_slack,node_conn_whatsapp,node_core_hub compute
+    classDef database fill:#3b1e5f,stroke:#a855f7,color:#f5e6ff
+    class node_sqlite_session database
+    classDef external_service fill:#3f3f2b,stroke:#eab308,color:#fbfbe6
+    class node_ext_fathom,node_ext_google,node_ext_mattermost,node_ext_slack external_service
+    classDef gateway fill:#5f1e2e,stroke:#f43f5e,color:#ffe6ec
+    class node_omni_http,node_omni_mcp gateway
+    classDef storage fill:#1e4f5f,stroke:#06b6d4,color:#e6fbff
+    class node_second_brain storage

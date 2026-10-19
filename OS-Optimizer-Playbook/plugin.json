@@ -1,0 +1,15 @@
+{
+  "name": "os-optimizer",
+  "description": "Audita e otimiza seu Segundo Cérebro / AI OS com 10 frameworks de context engineering, memória, arquitetura, higiene e discoverability. 100% compatível com Gemini, Spark, Antigravity e Claude.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Playbook Lab / Antigravity Adaptation"
+  },
+  "suggestedPrompts": [
+    "Inicie o onboarding do meu Segundo Cérebro.",
+    "Audite meu Segundo Cérebro usando o OS Optimizer.",
+    "Processe esta transcrição de reunião e atualize meus projetos ativos.",
+    "Faça um raio-x completo do meu Segundo Cérebro e aponte os problemas de maior impacto.",
+    "Revise meu GEMINI.md, regras e Skills para remover regras obsoletas e melhorar discoverability."
+  ]
+}

@@ -1,0 +1,9 @@
+%% Gerado automaticamente pelo ArchCode Studio a partir de .arch/diagrams/state/ciclo-de-vida-da-sessao.json
+%% Estado — Ciclo de vida do conector
+stateDiagram-v2
+    [*] --> Registrado: boot do hub
+    Registrado --> Ativo_Pronto: modulo habilitado via flag/env
+    Ativo_Pronto --> Executando_Tool: chamada MCP ou HTTP
+    Executando_Tool --> Ativo_Pronto: resposta entregue ao cliente
+    Ativo_Pronto --> Encerrado: SIGINT / SIGTERM / Close()
+    Encerrado --> [*]

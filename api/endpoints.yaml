@@ -1,0 +1,52 @@
+# Contratos de API derivados das arestas do diagrama macro.
+# Gerado e mantido pelo ArchCode Studio — edições manuais são preservadas.
+version: 1.0.0
+base_url: /v1
+endpoints:
+  - id: get-api-v1-tools
+    method: GET
+    path: /v1/tools
+    summary: Lista ferramentas disponíveis no formato OpenAI Function Calling
+    source: node-llm-clients
+    target: node-omni-http
+    edge_id: edge-clients-to-omni-http
+    auth: none
+    response: '{"tools": [{"type": "function", "function": {"name": string, "description": string, "parameters": object}}]}'
+    status_codes:
+      - 200
+      - 500
+    use_cases:
+      - CDU002
+  - id: post-api-v1-tools-execute
+    method: POST
+    path: /v1/tools/execute
+    summary: Executa dinamicamente uma ferramenta por nome e argumentos JSON
+    source: node-llm-clients
+    target: node-omni-http
+    edge_id: edge-clients-to-omni-http
+    auth: none
+    request: '{"name": string, "arguments": object}'
+    response: '{"result": any, "error": string}'
+    status_codes:
+      - 200
+      - 400
+      - 404
+      - 500
+    use_cases:
+      - CDU002
+      - CDU003
+      - CDU004
+      - CDU005
+  - id: get-api-v1-health
+    method: GET
+    path: /v1/health
+    summary: Retorna a integridade do hub e lista os conectores ativos
+    source: node-llm-clients
+    target: node-omni-http
+    edge_id: edge-clients-to-omni-http
+    auth: none
+    response: '{"status": "ok", "enabled_connectors": string[], "version": string}'
+    status_codes:
+      - 200
+    use_cases:
+      - CDU006

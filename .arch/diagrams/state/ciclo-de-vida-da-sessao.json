@@ -1,0 +1,121 @@
+{
+  "id": "ciclo-de-vida-da-sessao",
+  "kind": "state",
+  "name": "Ciclo de vida do conector",
+  "description": "Estados de ciclo de vida de um conector no Hub Hexagonal.",
+  "version": "1.0.0",
+  "last_modified": "2026-10-19T01:15:00Z",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "elements": [
+    {
+      "id": "el-inicio",
+      "type": "initial",
+      "name": "",
+      "position": {
+        "x": 40,
+        "y": 140
+      }
+    },
+    {
+      "id": "el-registrado",
+      "type": "state",
+      "name": "Registrado",
+      "position": {
+        "x": 200,
+        "y": 120
+      },
+      "entry": "valida namespace e esquemas de tools",
+      "do": "aguarda sinal de inicialização"
+    },
+    {
+      "id": "el-ativo",
+      "type": "state",
+      "name": "Ativo / Pronto",
+      "position": {
+        "x": 460,
+        "y": 120
+      },
+      "entry": "Initialize(ctx) autentica API/sessão",
+      "do": "atende requisições de tools/call"
+    },
+    {
+      "id": "el-executando",
+      "type": "state",
+      "name": "Executando Tool",
+      "position": {
+        "x": 720,
+        "y": 40
+      },
+      "entry": "despacha args via Handler(ctx)",
+      "do": "aplica token budgeting e minificação"
+    },
+    {
+      "id": "el-encerrado",
+      "type": "state",
+      "name": "Encerrado",
+      "position": {
+        "x": 720,
+        "y": 220
+      },
+      "entry": "Close() desconecta sockets e persiste sessão"
+    },
+    {
+      "id": "el-fim",
+      "type": "final",
+      "name": "",
+      "position": {
+        "x": 980,
+        "y": 140
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-1",
+      "type": "transition",
+      "source": "el-inicio",
+      "target": "el-registrado",
+      "trigger": "boot do hub"
+    },
+    {
+      "id": "rel-2",
+      "type": "transition",
+      "source": "el-registrado",
+      "target": "el-ativo",
+      "trigger": "modulo habilitado via flag/env",
+      "effect": "Initialize()"
+    },
+    {
+      "id": "rel-3",
+      "type": "transition",
+      "source": "el-ativo",
+      "target": "el-executando",
+      "trigger": "chamada MCP ou HTTP",
+      "effect": "inicia timeout context"
+    },
+    {
+      "id": "rel-4",
+      "type": "transition",
+      "source": "el-executando",
+      "target": "el-ativo",
+      "trigger": "resposta entregue ao cliente"
+    },
+    {
+      "id": "rel-5",
+      "type": "transition",
+      "source": "el-ativo",
+      "target": "el-encerrado",
+      "trigger": "SIGINT / SIGTERM / Close()"
+    },
+    {
+      "id": "rel-6",
+      "type": "transition",
+      "source": "el-encerrado",
+      "target": "el-fim"
+    }
+  ]
+}

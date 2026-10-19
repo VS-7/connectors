@@ -1,0 +1,1076 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-10-19T01:40:14Z",
+  "source_hash": "7fbb8e2",
+  "target_stack": "Go 1.23 / mark3labs/mcp-go / net/http / SQLite",
+  "tasks": [
+    {
+      "id": "TASK-E2E-01",
+      "title": "Testes ponta a ponta dos casos de uso",
+      "tier": "devops",
+      "dependencies": [
+        "TASK-CORE-01",
+        "TASK-FATHOM-01",
+        "TASK-FATHOM-02",
+        "TASK-GOOGLE-01",
+        "TASK-GOOGLE-02",
+        "TASK-LLM-01",
+        "TASK-MATTERMO-01",
+        "TASK-MATTERMO-02",
+        "TASK-OMNI-01",
+        "TASK-OMNI-02",
+        "TASK-OS-01",
+        "TASK-RF001-CORE",
+        "TASK-RF002-CORE",
+        "TASK-RF002-OMNI",
+        "TASK-RF003-CORE",
+        "TASK-RF003-OMNI",
+        "TASK-RF004-CORE",
+        "TASK-RF004-FATHOM",
+        "TASK-RF004-FATHOM-2",
+        "TASK-RF005-CORE",
+        "TASK-RF005-SQLITE",
+        "TASK-RF005-WHATSAPP",
+        "TASK-RF006-CORE",
+        "TASK-RF006-SLACK",
+        "TASK-RF006-SLACK-2",
+        "TASK-RF007-CORE",
+        "TASK-RF007-MATTERMO",
+        "TASK-RF007-MATTERMO-2",
+        "TASK-RF008-CORE",
+        "TASK-RF008-GOOGLE",
+        "TASK-RF008-GOOGLE-2",
+        "TASK-RF009-CORE",
+        "TASK-RF009-OMNI",
+        "TASK-RF009-OMNI-2",
+        "TASK-RF010-CORE",
+        "TASK-RF010-FATHOM",
+        "TASK-RF010-OS",
+        "TASK-SLACK-01",
+        "TASK-SLACK-02",
+        "TASK-SQLITE-01",
+        "TASK-WHATSAPP-01"
+      ],
+      "acceptance": [
+        "[CDU001] **Given** um cliente MCP conectado via stdio **When** envia `tools/call` com `{name: \"fathom_get_call_transcript\", arguments: {\"recording_id\": \"rec_123\"}}` **Then** recebe `mcp.CallToolResult` contendo o resumo e transcrição no formato textual.",
+        "[CDU001] **Given** uma biblioteca externa gerando logs durante a execução **When** emite texto de debug **Then** todo o conteúdo é direcionado para `os.Stderr` e o cliente MCP não desconecta.",
+        "[CDU002] **Given** o servidor HTTP em execução **When** recebe `GET /v1/tools` **Then** retorna status 200 com array `tools` onde cada item possui `type: \"function\"` e o esquema dos parâmetros.",
+        "[CDU002] **Given** uma requisição `POST /v1/tools/execute` com argumentos válidos **When** processada pelo gateway **Then** retorna HTTP 200 e o payload JSON produzido pelo conector.",
+        "[CDU003] **Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "[CDU003] **Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`.",
+        "[CDU004] **Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "[CDU004] **Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos.",
+        "[CDU005] **Given** token de autenticação Google válido **When** invocada `gmail_search_messages` com uma consulta **Then** retorna lista de e-mails em texto puro sem tags HTML.",
+        "[CDU005] **Given** uma requisição de busca no Drive **When** executada com sucesso **Then** retorna IDs e títulos dos arquivos encontrados em formato JSON conciso.",
+        "[CDU006] **Given** o comando `omni-mcp --enable=fathom` **When** o cliente executa `tools/list` **Then** apenas ferramentas com prefixo `fathom_` são listadas.",
+        "[CDU006] **Given** uma chamada a `GET /v1/health` **When** o gateway foi iniciado com `--enable=slack,mattermost` **Then** o JSON de resposta exibe `enabled_connectors: [\"slack\", \"mattermost\"]`."
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 1
+    },
+    {
+      "id": "TASK-OS-01",
+      "title": "Implementar OS-Optimizer Second Brain (Markdown Vault / AI OS)",
+      "tier": "data",
+      "component": "OS-Optimizer Second Brain",
+      "component_id": "node-second-brain",
+      "acceptance": [
+        "Upload e download assinados funcionam e objetos privados não são acessíveis sem assinatura."
+      ],
+      "requirements": [
+        "RF010"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 2
+    },
+    {
+      "id": "TASK-SQLITE-01",
+      "title": "Implementar SQLite Session Store (SQLite 3 / Local)",
+      "tier": "data",
+      "component": "SQLite Session Store",
+      "component_id": "node-sqlite-session",
+      "acceptance": [
+        "Migrações idempotentes criam o schema de `SQLite Session Store` e podem ser aplicadas duas vezes sem erro.",
+        "Rollback da última migração restaura o schema anterior sem perda de dados de teste."
+      ],
+      "requirements": [
+        "RF005",
+        "RNF004"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 3
+    },
+    {
+      "id": "TASK-FATHOM-01",
+      "title": "Implementar Fathom Video API (HTTPS REST API)",
+      "tier": "integration",
+      "component": "Fathom Video API",
+      "component_id": "node-ext-fathom",
+      "acceptance": [
+        "Integração com `Fathom Video API` possui timeout, retry com backoff e client fake para testes.",
+        "Credenciais vêm de variáveis de ambiente — nunca versionadas no repositório."
+      ],
+      "requirements": [
+        "RF004"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 4
+    },
+    {
+      "id": "TASK-FATHOM-02",
+      "title": "Implementar Fathom Connector (Go / Fathom Client)",
+      "tier": "integration",
+      "component": "Fathom Connector",
+      "component_id": "node-conn-fathom",
+      "dependencies": [
+        "TASK-FATHOM-01",
+        "TASK-OS-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `Fathom Connector` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF004",
+        "RF010",
+        "RNF002"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 5
+    },
+    {
+      "id": "TASK-GOOGLE-01",
+      "title": "Implementar Google Cloud APIs (Gmail \u0026 Drive REST)",
+      "tier": "integration",
+      "component": "Google Cloud APIs",
+      "component_id": "node-ext-google",
+      "acceptance": [
+        "Integração com `Google Cloud APIs` possui timeout, retry com backoff e client fake para testes.",
+        "Credenciais vêm de variáveis de ambiente — nunca versionadas no repositório."
+      ],
+      "requirements": [
+        "RF008"
+      ],
+      "use_cases": [
+        "CDU005"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 6
+    },
+    {
+      "id": "TASK-GOOGLE-02",
+      "title": "Implementar Google Workspace Connector (Go / google.golang.org/api)",
+      "tier": "integration",
+      "component": "Google Workspace Connector",
+      "component_id": "node-conn-google",
+      "dependencies": [
+        "TASK-GOOGLE-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `Google Workspace Connector` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF008",
+        "RNF002",
+        "RNF004"
+      ],
+      "use_cases": [
+        "CDU005"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 7
+    },
+    {
+      "id": "TASK-MATTERMO-01",
+      "title": "Implementar Mattermost Server API (Client4 REST API)",
+      "tier": "integration",
+      "component": "Mattermost Server API",
+      "component_id": "node-ext-mattermost",
+      "acceptance": [
+        "Integração com `Mattermost Server API` possui timeout, retry com backoff e client fake para testes.",
+        "Credenciais vêm de variáveis de ambiente — nunca versionadas no repositório."
+      ],
+      "requirements": [
+        "RF007"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 8
+    },
+    {
+      "id": "TASK-MATTERMO-02",
+      "title": "Implementar Mattermost Connector (Go / mattermost-server model)",
+      "tier": "integration",
+      "component": "Mattermost Connector",
+      "component_id": "node-conn-mattermost",
+      "dependencies": [
+        "TASK-MATTERMO-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `Mattermost Connector` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF007"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:40:14Z",
+      "order": 9
+    },
+    {
+      "id": "TASK-SLACK-01",
+      "title": "Implementar Slack Web API (HTTPS REST API)",
+      "tier": "integration",
+      "component": "Slack Web API",
+      "component_id": "node-ext-slack",
+      "acceptance": [
+        "Integração com `Slack Web API` possui timeout, retry com backoff e client fake para testes.",
+        "Credenciais vêm de variáveis de ambiente — nunca versionadas no repositório."
+      ],
+      "requirements": [
+        "RF006"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 10
+    },
+    {
+      "id": "TASK-SLACK-02",
+      "title": "Implementar Slack Connector (Go / slack-go)",
+      "tier": "integration",
+      "component": "Slack Connector",
+      "component_id": "node-conn-slack",
+      "dependencies": [
+        "TASK-SLACK-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `Slack Connector` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF006",
+        "RNF002"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 11
+    },
+    {
+      "id": "TASK-WHATSAPP-01",
+      "title": "Implementar WhatsApp Connector (Go / whatsmeow / Evolution)",
+      "tier": "integration",
+      "component": "WhatsApp Connector",
+      "component_id": "node-conn-whatsapp",
+      "dependencies": [
+        "TASK-SQLITE-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `WhatsApp Connector` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF005",
+        "RNF004"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 12
+    },
+    {
+      "id": "TASK-OMNI-01",
+      "title": "Implementar Omni HTTP Gateway (Go 1.23 / net/http)",
+      "tier": "integration",
+      "component": "Omni HTTP Gateway",
+      "component_id": "node-omni-http",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "Rotas desconhecidas retornam 404 e erros upstream retornam 502 com corpo padronizado.",
+        "Rate limiting e CORS configurados e cobertos por teste de integração.",
+        "Contrato `GET /v1/health` implementado e validado contra `api/endpoints.yaml`.",
+        "Contrato `GET /v1/tools` implementado e validado contra `api/endpoints.yaml`.",
+        "Contrato `POST /v1/tools/execute` implementado e validado contra `api/endpoints.yaml`."
+      ],
+      "requirements": [
+        "RF003",
+        "RF009",
+        "RNF003",
+        "RNF005"
+      ],
+      "use_cases": [
+        "CDU002",
+        "CDU006"
+      ],
+      "endpoints": [
+        "GET /v1/health",
+        "GET /v1/tools",
+        "POST /v1/tools/execute"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 13
+    },
+    {
+      "id": "TASK-OMNI-02",
+      "title": "Implementar Omni MCP Server (Go 1.23 / mark3labs/mcp-go)",
+      "tier": "integration",
+      "component": "Omni MCP Server",
+      "component_id": "node-omni-mcp",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "Rotas desconhecidas retornam 404 e erros upstream retornam 502 com corpo padronizado.",
+        "Rate limiting e CORS configurados e cobertos por teste de integração."
+      ],
+      "requirements": [
+        "RF002",
+        "RF009",
+        "RNF001",
+        "RNF003",
+        "RNF005"
+      ],
+      "use_cases": [
+        "CDU001",
+        "CDU006"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 14
+    },
+    {
+      "id": "TASK-LLM-01",
+      "title": "Implementar LLM \u0026 Agent Clients (Claude / Antigravity / Codex / Spark)",
+      "tier": "frontend",
+      "component": "LLM \u0026 Agent Clients",
+      "component_id": "node-llm-clients",
+      "dependencies": [
+        "TASK-OMNI-01",
+        "TASK-OMNI-02"
+      ],
+      "acceptance": [
+        "A interface consome exclusivamente os contratos declarados em `api/endpoints.yaml`.",
+        "Estados de carregamento, vazio e erro estão implementados em todas as telas do fluxo.",
+        "Contrato `GET /v1/health` implementado e validado contra `api/endpoints.yaml`.",
+        "Contrato `GET /v1/tools` implementado e validado contra `api/endpoints.yaml`.",
+        "Contrato `POST /v1/tools/execute` implementado e validado contra `api/endpoints.yaml`."
+      ],
+      "use_cases": [
+        "CDU001",
+        "CDU002"
+      ],
+      "endpoints": [
+        "GET /v1/health",
+        "GET /v1/tools",
+        "POST /v1/tools/execute"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:40:14Z",
+      "order": 15
+    },
+    {
+      "id": "TASK-RF002-OMNI",
+      "title": "Implementar exposição MCP Nativa via stdio e SSE em Omni MCP Server (RF002)",
+      "tier": "integration",
+      "component": "Omni MCP Server",
+      "component_id": "node-omni-mcp",
+      "dependencies": [
+        "TASK-OMNI-02"
+      ],
+      "acceptance": [
+        "RF002 atendido em Omni MCP Server: Exposição MCP Nativa via stdio e SSE",
+        "**Given** um cliente MCP conectado via stdio **When** envia `tools/call` com `{name: \"fathom_get_call_transcript\", arguments: {\"recording_id\": \"rec_123\"}}` **Then** recebe `mcp.CallToolResult` contendo o resumo e transcrição no formato textual.",
+        "**Given** uma biblioteca externa gerando logs durante a execução **When** emite texto de debug **Then** todo o conteúdo é direcionado para `os.Stderr` e o cliente MCP não desconecta."
+      ],
+      "requirements": [
+        "RF002"
+      ],
+      "use_cases": [
+        "CDU001"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 16
+    },
+    {
+      "id": "TASK-RF003-OMNI",
+      "title": "Implementar gateway REST de OpenAI Function Calling em Omni HTTP Gateway (RF003)",
+      "tier": "integration",
+      "component": "Omni HTTP Gateway",
+      "component_id": "node-omni-http",
+      "dependencies": [
+        "TASK-OMNI-01"
+      ],
+      "acceptance": [
+        "RF003 atendido em Omni HTTP Gateway: Gateway REST de OpenAI Function Calling",
+        "**Given** o servidor HTTP em execução **When** recebe `GET /v1/tools` **Then** retorna status 200 com array `tools` onde cada item possui `type: \"function\"` e o esquema dos parâmetros.",
+        "**Given** uma requisição `POST /v1/tools/execute` com argumentos válidos **When** processada pelo gateway **Then** retorna HTTP 200 e o payload JSON produzido pelo conector."
+      ],
+      "requirements": [
+        "RF003"
+      ],
+      "use_cases": [
+        "CDU002"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 17
+    },
+    {
+      "id": "TASK-RF003-CORE",
+      "title": "Implementar gateway REST de OpenAI Function Calling em Core Connectors Hub (RF003)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF003 atendido em Core Connectors Hub: Gateway REST de OpenAI Function Calling",
+        "**Given** o servidor HTTP em execução **When** recebe `GET /v1/tools` **Then** retorna status 200 com array `tools` onde cada item possui `type: \"function\"` e o esquema dos parâmetros.",
+        "**Given** uma requisição `POST /v1/tools/execute` com argumentos válidos **When** processada pelo gateway **Then** retorna HTTP 200 e o payload JSON produzido pelo conector."
+      ],
+      "requirements": [
+        "RF003"
+      ],
+      "use_cases": [
+        "CDU002"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 18
+    },
+    {
+      "id": "TASK-RF004-CORE",
+      "title": "Implementar conector Fathom Video para Transcrições e Resumos em Core Connectors Hub (RF004)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF004 atendido em Core Connectors Hub: Conector Fathom Video para Transcrições e Resumos",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF004"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 19
+    },
+    {
+      "id": "TASK-RF004-FATHOM",
+      "title": "Implementar conector Fathom Video para Transcrições e Resumos em Fathom Connector (RF004)",
+      "tier": "integration",
+      "component": "Fathom Connector",
+      "component_id": "node-conn-fathom",
+      "dependencies": [
+        "TASK-FATHOM-02"
+      ],
+      "acceptance": [
+        "RF004 atendido em Fathom Connector: Conector Fathom Video para Transcrições e Resumos",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF004"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 20
+    },
+    {
+      "id": "TASK-RF004-FATHOM-2",
+      "title": "Implementar conector Fathom Video para Transcrições e Resumos em Fathom Video API (RF004)",
+      "tier": "integration",
+      "component": "Fathom Video API",
+      "component_id": "node-ext-fathom",
+      "dependencies": [
+        "TASK-FATHOM-01"
+      ],
+      "acceptance": [
+        "RF004 atendido em Fathom Video API: Conector Fathom Video para Transcrições e Resumos",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF004"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 21
+    },
+    {
+      "id": "TASK-RF005-CORE",
+      "title": "Implementar conector WhatsApp em Core Connectors Hub (RF005)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF005 atendido em Core Connectors Hub: Conector WhatsApp",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF005"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 22
+    },
+    {
+      "id": "TASK-RF005-WHATSAPP",
+      "title": "Implementar conector WhatsApp em WhatsApp Connector (RF005)",
+      "tier": "integration",
+      "component": "WhatsApp Connector",
+      "component_id": "node-conn-whatsapp",
+      "dependencies": [
+        "TASK-WHATSAPP-01"
+      ],
+      "acceptance": [
+        "RF005 atendido em WhatsApp Connector: Conector WhatsApp",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF005"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 23
+    },
+    {
+      "id": "TASK-RF005-SQLITE",
+      "title": "Implementar conector WhatsApp em SQLite Session Store (RF005)",
+      "tier": "data",
+      "component": "SQLite Session Store",
+      "component_id": "node-sqlite-session",
+      "dependencies": [
+        "TASK-SQLITE-01"
+      ],
+      "acceptance": [
+        "RF005 atendido em SQLite Session Store: Conector WhatsApp",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF005"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 24
+    },
+    {
+      "id": "TASK-RF006-CORE",
+      "title": "Implementar conector Slack com Suporte a User e Bot Tokens em Core Connectors Hub (RF006)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF006 atendido em Core Connectors Hub: Conector Slack com Suporte a User e Bot Tokens",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF006"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 25
+    },
+    {
+      "id": "TASK-RF006-SLACK",
+      "title": "Implementar conector Slack com Suporte a User e Bot Tokens em Slack Connector (RF006)",
+      "tier": "integration",
+      "component": "Slack Connector",
+      "component_id": "node-conn-slack",
+      "dependencies": [
+        "TASK-SLACK-02"
+      ],
+      "acceptance": [
+        "RF006 atendido em Slack Connector: Conector Slack com Suporte a User e Bot Tokens",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF006"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 26
+    },
+    {
+      "id": "TASK-RF006-SLACK-2",
+      "title": "Implementar conector Slack com Suporte a User e Bot Tokens em Slack Web API (RF006)",
+      "tier": "integration",
+      "component": "Slack Web API",
+      "component_id": "node-ext-slack",
+      "dependencies": [
+        "TASK-SLACK-01"
+      ],
+      "acceptance": [
+        "RF006 atendido em Slack Web API: Conector Slack com Suporte a User e Bot Tokens",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF006"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 27
+    },
+    {
+      "id": "TASK-RF007-CORE",
+      "title": "Implementar conector Mattermost via Client4 em Core Connectors Hub (RF007)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF007 atendido em Core Connectors Hub: Conector Mattermost via Client4",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF007"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 28
+    },
+    {
+      "id": "TASK-RF007-MATTERMO",
+      "title": "Implementar conector Mattermost via Client4 em Mattermost Connector (RF007)",
+      "tier": "integration",
+      "component": "Mattermost Connector",
+      "component_id": "node-conn-mattermost",
+      "dependencies": [
+        "TASK-MATTERMO-02"
+      ],
+      "acceptance": [
+        "RF007 atendido em Mattermost Connector: Conector Mattermost via Client4",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF007"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 29
+    },
+    {
+      "id": "TASK-RF007-MATTERMO-2",
+      "title": "Implementar conector Mattermost via Client4 em Mattermost Server API (RF007)",
+      "tier": "integration",
+      "component": "Mattermost Server API",
+      "component_id": "node-ext-mattermost",
+      "dependencies": [
+        "TASK-MATTERMO-01"
+      ],
+      "acceptance": [
+        "RF007 atendido em Mattermost Server API: Conector Mattermost via Client4",
+        "**Given** credenciais válidas do Slack **When** invocada `slack_send_message` com canal e texto **Then** a mensagem é postada no Slack e a tool devolve `{\"status\": \"delivered\", \"message_id\": \"\u003cid\u003e\"}`.",
+        "**Given** busca em mensagens do Mattermost **When** invocada `mattermost_search_posts` **Then** retorna lista filtrada contendo no máximo 10 snippets compactos."
+      ],
+      "requirements": [
+        "RF007"
+      ],
+      "use_cases": [
+        "CDU004"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 30
+    },
+    {
+      "id": "TASK-RF008-CORE",
+      "title": "Implementar conector Google Workspace (Gmail e Google Drive) em Core Connectors Hub (RF008)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF008 atendido em Core Connectors Hub: Conector Google Workspace (Gmail e Google Drive)",
+        "**Given** token de autenticação Google válido **When** invocada `gmail_search_messages` com uma consulta **Then** retorna lista de e-mails em texto puro sem tags HTML.",
+        "**Given** uma requisição de busca no Drive **When** executada com sucesso **Then** retorna IDs e títulos dos arquivos encontrados em formato JSON conciso."
+      ],
+      "requirements": [
+        "RF008"
+      ],
+      "use_cases": [
+        "CDU005"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 31
+    },
+    {
+      "id": "TASK-RF008-GOOGLE",
+      "title": "Implementar conector Google Workspace (Gmail e Google Drive) em Google Workspace Connector (RF008)",
+      "tier": "integration",
+      "component": "Google Workspace Connector",
+      "component_id": "node-conn-google",
+      "dependencies": [
+        "TASK-GOOGLE-02"
+      ],
+      "acceptance": [
+        "RF008 atendido em Google Workspace Connector: Conector Google Workspace (Gmail e Google Drive)",
+        "**Given** token de autenticação Google válido **When** invocada `gmail_search_messages` com uma consulta **Then** retorna lista de e-mails em texto puro sem tags HTML.",
+        "**Given** uma requisição de busca no Drive **When** executada com sucesso **Then** retorna IDs e títulos dos arquivos encontrados em formato JSON conciso."
+      ],
+      "requirements": [
+        "RF008"
+      ],
+      "use_cases": [
+        "CDU005"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 32
+    },
+    {
+      "id": "TASK-RF008-GOOGLE-2",
+      "title": "Implementar conector Google Workspace (Gmail e Google Drive) em Google Cloud APIs (RF008)",
+      "tier": "integration",
+      "component": "Google Cloud APIs",
+      "component_id": "node-ext-google",
+      "dependencies": [
+        "TASK-GOOGLE-01"
+      ],
+      "acceptance": [
+        "RF008 atendido em Google Cloud APIs: Conector Google Workspace (Gmail e Google Drive)",
+        "**Given** token de autenticação Google válido **When** invocada `gmail_search_messages` com uma consulta **Then** retorna lista de e-mails em texto puro sem tags HTML.",
+        "**Given** uma requisição de busca no Drive **When** executada com sucesso **Then** retorna IDs e títulos dos arquivos encontrados em formato JSON conciso."
+      ],
+      "requirements": [
+        "RF008"
+      ],
+      "use_cases": [
+        "CDU005"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 33
+    },
+    {
+      "id": "TASK-RF009-OMNI",
+      "title": "Implementar ativação Seletiva e Modulação de Ferramentas em Omni MCP Server (RF009)",
+      "tier": "integration",
+      "component": "Omni MCP Server",
+      "component_id": "node-omni-mcp",
+      "dependencies": [
+        "TASK-OMNI-02"
+      ],
+      "acceptance": [
+        "RF009 atendido em Omni MCP Server: Ativação Seletiva e Modulação de Ferramentas",
+        "**Given** o comando `omni-mcp --enable=fathom` **When** o cliente executa `tools/list` **Then** apenas ferramentas com prefixo `fathom_` são listadas.",
+        "**Given** uma chamada a `GET /v1/health` **When** o gateway foi iniciado com `--enable=slack,mattermost` **Then** o JSON de resposta exibe `enabled_connectors: [\"slack\", \"mattermost\"]`."
+      ],
+      "requirements": [
+        "RF009"
+      ],
+      "use_cases": [
+        "CDU006"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 34
+    },
+    {
+      "id": "TASK-RF009-OMNI-2",
+      "title": "Implementar ativação Seletiva e Modulação de Ferramentas em Omni HTTP Gateway (RF009)",
+      "tier": "integration",
+      "component": "Omni HTTP Gateway",
+      "component_id": "node-omni-http",
+      "dependencies": [
+        "TASK-OMNI-01"
+      ],
+      "acceptance": [
+        "RF009 atendido em Omni HTTP Gateway: Ativação Seletiva e Modulação de Ferramentas",
+        "**Given** o comando `omni-mcp --enable=fathom` **When** o cliente executa `tools/list` **Then** apenas ferramentas com prefixo `fathom_` são listadas.",
+        "**Given** uma chamada a `GET /v1/health` **When** o gateway foi iniciado com `--enable=slack,mattermost` **Then** o JSON de resposta exibe `enabled_connectors: [\"slack\", \"mattermost\"]`."
+      ],
+      "requirements": [
+        "RF009"
+      ],
+      "use_cases": [
+        "CDU006"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 35
+    },
+    {
+      "id": "TASK-RF009-CORE",
+      "title": "Implementar ativação Seletiva e Modulação de Ferramentas em Core Connectors Hub (RF009)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF009 atendido em Core Connectors Hub: Ativação Seletiva e Modulação de Ferramentas",
+        "**Given** o comando `omni-mcp --enable=fathom` **When** o cliente executa `tools/list` **Then** apenas ferramentas com prefixo `fathom_` são listadas.",
+        "**Given** uma chamada a `GET /v1/health` **When** o gateway foi iniciado com `--enable=slack,mattermost` **Then** o JSON de resposta exibe `enabled_connectors: [\"slack\", \"mattermost\"]`."
+      ],
+      "requirements": [
+        "RF009"
+      ],
+      "use_cases": [
+        "CDU006"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 36
+    },
+    {
+      "id": "TASK-RF010-CORE",
+      "title": "Implementar integração com o Second Brain (OS-Optimizer-Playbook) em Core Connectors Hub (RF010)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF010 atendido em Core Connectors Hub: Integração com o Second Brain (OS-Optimizer-Playbook)",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF010"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 37
+    },
+    {
+      "id": "TASK-RF010-FATHOM",
+      "title": "Implementar integração com o Second Brain (OS-Optimizer-Playbook) em Fathom Connector (RF010)",
+      "tier": "integration",
+      "component": "Fathom Connector",
+      "component_id": "node-conn-fathom",
+      "dependencies": [
+        "TASK-FATHOM-02"
+      ],
+      "acceptance": [
+        "RF010 atendido em Fathom Connector: Integração com o Second Brain (OS-Optimizer-Playbook)",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF010"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 38
+    },
+    {
+      "id": "TASK-RF010-OS",
+      "title": "Implementar integração com o Second Brain (OS-Optimizer-Playbook) em OS-Optimizer Second Brain (RF010)",
+      "tier": "data",
+      "component": "OS-Optimizer Second Brain",
+      "component_id": "node-second-brain",
+      "dependencies": [
+        "TASK-OS-01"
+      ],
+      "acceptance": [
+        "RF010 atendido em OS-Optimizer Second Brain: Integração com o Second Brain (OS-Optimizer-Playbook)",
+        "**Given** uma gravação concluída no Fathom **When** o conector executa `fathom_get_call_transcript` **Then** retorna DTO contendo resumo e transcrição limpa sem HTML redundante.",
+        "**Given** o retorno da ferramenta **When** o operador processa com `meeting-intelligence` **Then** um novo arquivo Markdown é criado em `OS-Optimizer-Playbook/Meetings/` e tarefas são cadastradas em `Projects/active-projects.md`."
+      ],
+      "requirements": [
+        "RF010"
+      ],
+      "use_cases": [
+        "CDU003"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:53Z",
+      "order": 39
+    },
+    {
+      "id": "TASK-CORE-01",
+      "title": "Implementar Core Connectors Hub (Go 1.23 / Hexagonal Ports)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-FATHOM-02",
+        "TASK-GOOGLE-02",
+        "TASK-MATTERMO-02",
+        "TASK-SLACK-02",
+        "TASK-SQLITE-01",
+        "TASK-WHATSAPP-01"
+      ],
+      "acceptance": [
+        "Testes unitários da lógica de `Core Connectors Hub` cobrem cenários de sucesso e de falha."
+      ],
+      "requirements": [
+        "RF001",
+        "RF002",
+        "RF003",
+        "RF004",
+        "RF005",
+        "RF006",
+        "RF007",
+        "RF008",
+        "RF009",
+        "RF010",
+        "RNF001",
+        "RNF002",
+        "RNF003",
+        "RNF004",
+        "RNF005"
+      ],
+      "use_cases": [
+        "CDU001",
+        "CDU002",
+        "CDU003",
+        "CDU004",
+        "CDU005",
+        "CDU006"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:40Z",
+      "order": 40
+    },
+    {
+      "id": "TASK-RF001-CORE",
+      "title": "Implementar contrato Universal e Registro Hexagonal de Conectores em Core Connectors Hub (RF001)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF001 atendido em Core Connectors Hub: Contrato Universal e Registro Hexagonal de Conectores",
+        "**Given** um cliente MCP conectado via stdio **When** envia `tools/call` com `{name: \"fathom_get_call_transcript\", arguments: {\"recording_id\": \"rec_123\"}}` **Then** recebe `mcp.CallToolResult` contendo o resumo e transcrição no formato textual.",
+        "**Given** uma biblioteca externa gerando logs durante a execução **When** emite texto de debug **Then** todo o conteúdo é direcionado para `os.Stderr` e o cliente MCP não desconecta.",
+        "**Given** o servidor HTTP em execução **When** recebe `GET /v1/tools` **Then** retorna status 200 com array `tools` onde cada item possui `type: \"function\"` e o esquema dos parâmetros.",
+        "**Given** uma requisição `POST /v1/tools/execute` com argumentos válidos **When** processada pelo gateway **Then** retorna HTTP 200 e o payload JSON produzido pelo conector."
+      ],
+      "requirements": [
+        "RF001"
+      ],
+      "use_cases": [
+        "CDU001",
+        "CDU002"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 41
+    },
+    {
+      "id": "TASK-RF002-CORE",
+      "title": "Implementar exposição MCP Nativa via stdio e SSE em Core Connectors Hub (RF002)",
+      "tier": "backend",
+      "component": "Core Connectors Hub",
+      "component_id": "node-core-hub",
+      "dependencies": [
+        "TASK-CORE-01"
+      ],
+      "acceptance": [
+        "RF002 atendido em Core Connectors Hub: Exposição MCP Nativa via stdio e SSE",
+        "**Given** um cliente MCP conectado via stdio **When** envia `tools/call` com `{name: \"fathom_get_call_transcript\", arguments: {\"recording_id\": \"rec_123\"}}` **Then** recebe `mcp.CallToolResult` contendo o resumo e transcrição no formato textual.",
+        "**Given** uma biblioteca externa gerando logs durante a execução **When** emite texto de debug **Then** todo o conteúdo é direcionado para `os.Stderr` e o cliente MCP não desconecta."
+      ],
+      "requirements": [
+        "RF002"
+      ],
+      "use_cases": [
+        "CDU001"
+      ],
+      "status": "completed",
+      "updated_at": "2026-10-19T01:39:52Z",
+      "order": 42
+    }
+  ]
+}

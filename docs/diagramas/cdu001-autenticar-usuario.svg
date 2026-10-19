@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="707.6" height="608" viewBox="56.2 10 707.6 608" font-family="Inter, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12">
+<title>CDU001 — Autenticar usuário</title>
+<defs>
+<marker id="m-arrow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1 L11 6 L1 11" fill="none" stroke="#000000" stroke-width="1.3"/></marker>
+<marker id="m-arrow-filled" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1 L11 6 L1 11 z" fill="#000000" stroke="#000000" stroke-width="1"/></marker>
+<marker id="m-triangle" viewBox="0 0 16 16" refX="15" refY="8" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 1 L15 8 L1 15 z" fill="#ffffff" stroke="#000000" stroke-width="1.3"/></marker>
+<marker id="m-diamond" viewBox="0 0 20 12" refX="19" refY="6" markerWidth="20" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 6 L10 1 L19 6 L10 11 z" fill="#ffffff" stroke="#000000" stroke-width="1.3"/></marker>
+<marker id="m-diamond-filled" viewBox="0 0 20 12" refX="19" refY="6" markerWidth="20" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M1 6 L10 1 L19 6 L10 11 z" fill="#000000" stroke="#000000" stroke-width="1.3"/></marker>
+</defs>
+<rect x="56.2" y="10" width="707.6" height="608" fill="#ffffff"/>
+<g data-id="el-credenciais-invalidas" data-type="fragment">
+<rect x="220" y="420" width="460" height="120" fill="none" stroke="#000000" stroke-width="1.3"/>
+<path d="M220 420 H263.1 V433 L256.1 440 H220 Z" fill="#ffffff" stroke="#000000" stroke-width="1.3"/>
+<text x="228" y="434" text-anchor="start" font-size="11.5" fill="#000000" font-weight="600">alt</text>
+<text x="271.1" y="434" text-anchor="start" font-size="11.5" fill="#000000">[credenciais inválidas]</text>
+<text x="672" y="534" text-anchor="end" font-size="10.5" fill="#000000" fill-opacity="0.7">Retorna 401 genérico</text>
+</g>
+<g data-id="el-usuario" data-type="lifeline">
+<g fill="none" stroke="#000000" stroke-width="1.4" stroke-linecap="round" transform="translate(98 40) scale(0.6)"><circle cx="20" cy="8" r="7" fill="#ffffff"/><path d="M20 15v22M5 24h30M20 37L8 56M20 37l12 19"/></g>
+<text x="110" y="90" text-anchor="middle" fill="#000000">Usuário</text>
+<line x1="110" y1="96" x2="110" y2="588" stroke="#000000" stroke-width="1.3" stroke-dasharray="5 4"/>
+</g>
+<g data-id="el-web-app" data-type="lifeline">
+<g transform="translate(290 40)"><path d="M4 3v20M4 13h8" stroke="#000000" stroke-width="1.3" fill="none"/><circle cx="24" cy="13" r="11" fill="#ffffff" stroke="#000000" stroke-width="1.3"/></g>
+<text x="310" y="80" text-anchor="middle" fill="#000000">Web App</text>
+<line x1="310" y1="86" x2="310" y2="588" stroke="#000000" stroke-width="1.3" stroke-dasharray="5 4"/>
+</g>
+<g data-id="el-auth-service" data-type="lifeline">
+<g transform="translate(496 40)"><circle cx="14" cy="15" r="11.5" fill="#ffffff" stroke="#000000" stroke-width="1.3"/><path d="M11 1.5l4.5 2.5L11 6.5" fill="none" stroke="#000000" stroke-width="1.3"/></g>
+<text x="510" y="82" text-anchor="middle" fill="#000000">Auth Service</text>
+<line x1="510" y1="88" x2="510" y2="588" stroke="#000000" stroke-width="1.3" stroke-dasharray="5 4"/>
+</g>
+<g data-id="el-auth-db" data-type="lifeline">
+<g transform="translate(695 40)"><path d="M2 6v18c0 2.5 5.8 4.5 13 4.5s13-2 13-4.5V6" fill="#ffffff" stroke="#000000" stroke-width="1.3"/><ellipse cx="15" cy="6" rx="13" ry="4.5" fill="#ffffff" stroke="#000000" stroke-width="1.3"/></g>
+<text x="710" y="84" text-anchor="middle" fill="#000000">Auth DB</text>
+<line x1="710" y1="90" x2="710" y2="588" stroke="#000000" stroke-width="1.3" stroke-dasharray="5 4"/>
+</g>
+<g data-id="rel-1" data-type="message" data-order="1">
+<path d="M110 120 H309" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow-filled)"/>
+<text x="210" y="114" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">1: informa e-mail e senha</text>
+</g>
+<g data-id="rel-2" data-type="message" data-order="2">
+<path d="M310 164 H509" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow-filled)"/>
+<text x="410" y="158" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">2: POST /api/v1/auth/login</text>
+</g>
+<g data-id="rel-3" data-type="message" data-order="3">
+<path d="M510 208 H709" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow-filled)"/>
+<text x="610" y="202" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">3: consulta usuário por e-mail</text>
+</g>
+<g data-id="rel-4" data-type="message" data-order="4">
+<path d="M710 252 H511" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow)" stroke-dasharray="6 4"/>
+<text x="610" y="246" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">4: hash da senha</text>
+</g>
+<g data-id="rel-5" data-type="message" data-order="5">
+<path d="M510 296 H544 V318 H512" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow-filled)"/>
+<text x="550" y="300" text-anchor="start" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">5: emite JWT (1h)</text>
+</g>
+<g data-id="rel-6" data-type="message" data-order="6">
+<path d="M510 340 H311" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow)" stroke-dasharray="6 4"/>
+<text x="410" y="334" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">6: 200 {token, expires_in}</text>
+</g>
+<g data-id="rel-7" data-type="message" data-order="7">
+<path d="M310 384 H111" fill="none" stroke="#000000" stroke-width="1.3" marker-end="url(#m-arrow)" stroke-dasharray="6 4"/>
+<text x="210" y="378" text-anchor="middle" font-size="11" fill="#000000" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" paint-order="stroke">7: redireciona ao painel</text>
+</g>
+</svg>

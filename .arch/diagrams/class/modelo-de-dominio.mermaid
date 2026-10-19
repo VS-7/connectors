@@ -1,0 +1,39 @@
+%% Gerado automaticamente pelo ArchCode Studio a partir de .arch/diagrams/class/modelo-de-dominio.json
+%% Modelo de Domínio — Universal Connectors
+classDiagram
+    class Connector {
+        <<interface>>
+        +Namespace() string
+        +Initialize(ctx context.Context) error
+        +Tools() []ToolDefinition
+        +Close() error
+    }
+
+    class ToolDefinition {
+        +string Name
+        +string Description
+        +json.RawMessage InputSchema
+        +Handler func(ctx, rawArgs) (any, error)
+    }
+
+    class MCPBridge {
+        <<adapter>>
+        +BuildMCPServer(connectors []Connector) *server.MCPServer
+    }
+
+    class OpenAIGateway {
+        <<adapter>>
+        +GetToolsSchema() []OpenAITool
+        +ExecuteTool(name string, args json.RawMessage) any
+    }
+
+    class FathomConnector {
+        <<adapter>>
+        -string apiKey
+        -handleGetTranscript(ctx, rawArgs) any
+    }
+
+    Connector "1" --> "1..*" ToolDefinition : expõe
+    FathomConnector ..|> Connector
+    MCPBridge ..> Connector : consome
+    OpenAIGateway ..> Connector : consome

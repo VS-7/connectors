@@ -1,0 +1,13 @@
+schema_version: 1.0.0
+project_name: connectors
+description: Hub Universal de Conectores em Go com Arquitetura Hexagonal, Servidor MCP e Gateway OpenAI Function Calling para LLMs e Second Brain
+version: 0.1.0
+authors:
+  - name: Vitor Sergio
+
+settings:
+  diagram_engine: react-flow
+  sync_mermaid: true
+  auto_layout_on_import: false
+  pricing_currency: BRL
+

@@ -1,0 +1,181 @@
+{
+  "id": "modelo-de-dominio",
+  "kind": "class",
+  "name": "Modelo de Domínio — Universal Connectors",
+  "description": "Contratos agnósticos da arquitetura hexagonal, bridges e conectores.",
+  "version": "1.0.0",
+  "last_modified": "2026-10-19T01:15:00Z",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "elements": [
+    {
+      "id": "el-connector",
+      "type": "interface",
+      "name": "Connector",
+      "position": {
+        "x": 400,
+        "y": 40
+      },
+      "documentation": "Contrato universal da porta interna em Go.",
+      "operations": [
+        {
+          "name": "Namespace",
+          "type": "string",
+          "visibility": "+"
+        },
+        {
+          "name": "Initialize",
+          "type": "error",
+          "visibility": "+",
+          "params": "ctx: context.Context"
+        },
+        {
+          "name": "Tools",
+          "type": "[]ToolDefinition",
+          "visibility": "+"
+        },
+        {
+          "name": "Close",
+          "type": "error",
+          "visibility": "+"
+        }
+      ],
+      "component_id": "node-core-hub"
+    },
+    {
+      "id": "el-tooldefinition",
+      "type": "class",
+      "name": "ToolDefinition",
+      "position": {
+        "x": 760,
+        "y": 40
+      },
+      "attributes": [
+        {
+          "name": "Name",
+          "type": "string",
+          "visibility": "+"
+        },
+        {
+          "name": "Description",
+          "type": "string",
+          "visibility": "+"
+        },
+        {
+          "name": "InputSchema",
+          "type": "json.RawMessage",
+          "visibility": "+"
+        },
+        {
+          "name": "Handler",
+          "type": "func(ctx, rawArgs) (any, error)",
+          "visibility": "+"
+        }
+      ],
+      "component_id": "node-core-hub"
+    },
+    {
+      "id": "el-mcpbridge",
+      "type": "class",
+      "name": "MCPBridge",
+      "position": {
+        "x": 40,
+        "y": 40
+      },
+      "stereotype": "adapter",
+      "operations": [
+        {
+          "name": "BuildMCPServer",
+          "type": "*server.MCPServer",
+          "visibility": "+",
+          "params": "connectors: []Connector"
+        }
+      ],
+      "component_id": "node-omni-mcp"
+    },
+    {
+      "id": "el-openaibridge",
+      "type": "class",
+      "name": "OpenAIGateway",
+      "position": {
+        "x": 40,
+        "y": 240
+      },
+      "stereotype": "adapter",
+      "operations": [
+        {
+          "name": "GetToolsSchema",
+          "type": "[]OpenAITool",
+          "visibility": "+"
+        },
+        {
+          "name": "ExecuteTool",
+          "type": "any",
+          "visibility": "+",
+          "params": "name: string, args: json.RawMessage"
+        }
+      ],
+      "component_id": "node-omni-http"
+    },
+    {
+      "id": "el-fathomconn",
+      "type": "class",
+      "name": "FathomConnector",
+      "position": {
+        "x": 400,
+        "y": 300
+      },
+      "stereotype": "adapter",
+      "attributes": [
+        {
+          "name": "apiKey",
+          "type": "string",
+          "visibility": "-"
+        }
+      ],
+      "operations": [
+        {
+          "name": "handleGetTranscript",
+          "type": "any",
+          "visibility": "-",
+          "params": "ctx, rawArgs"
+        }
+      ],
+      "component_id": "node-conn-fathom"
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-1",
+      "type": "association",
+      "source": "el-connector",
+      "target": "el-tooldefinition",
+      "name": "expõe",
+      "source_multiplicity": "1",
+      "target_multiplicity": "1..*"
+    },
+    {
+      "id": "rel-2",
+      "type": "realization",
+      "source": "el-fathomconn",
+      "target": "el-connector"
+    },
+    {
+      "id": "rel-3",
+      "type": "dependency",
+      "source": "el-mcpbridge",
+      "target": "el-connector",
+      "name": "consome"
+    },
+    {
+      "id": "rel-4",
+      "type": "dependency",
+      "source": "el-openaibridge",
+      "target": "el-connector",
+      "name": "consome"
+    }
+  ]
+}

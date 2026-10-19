@@ -1,0 +1,16 @@
+%% Gerado automaticamente pelo ArchCode Studio a partir de .arch/diagrams/sequence/cdu001-executar-ferramenta-via-mcp.json
+%% Sequência — CDU001 — Executar Ferramenta via MCP
+sequenceDiagram
+    autonumber
+    actor el_mcp_client as Cliente MCP (Claude)
+    participant el_omni_mcp as Omni MCP Server
+    participant el_core_hub as Core Connectors Hub
+    participant el_conn_fathom as Fathom Connector
+
+    el_mcp_client->>el_omni_mcp: JSON-RPC tools/call (fathom_get_call_transcript)
+    el_omni_mcp->>el_core_hub: Dispatch(ctx, 'fathom_get_call_transcript', args)
+    el_core_hub->>el_conn_fathom: Handler(ctx, jsonArgs)
+    el_conn_fathom->>el_conn_fathom: Busca API Fathom + Trunca Token Budget
+    el_conn_fathom-->>el_core_hub: TranscriptDTO estruturado
+    el_core_hub-->>el_omni_mcp: Resultado serializado
+    el_omni_mcp-->>el_mcp_client: mcp.CallToolResult(text)

@@ -1,0 +1,518 @@
+{
+  "version": "1.0.0",
+  "last_modified": "2026-10-19T01:40:14Z",
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "nodes": [
+    {
+      "id": "node-llm-clients",
+      "type": "client",
+      "position": {
+        "x": 40,
+        "y": 250
+      },
+      "data": {
+        "label": "LLM \u0026 Agent Clients",
+        "technology": "Claude / Antigravity / Codex / Spark",
+        "description": "Clientes e agentes de IA que invocam ferramentas via MCP ou OpenAI Function Calling.",
+        "tier": "frontend",
+        "executive": true,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "lambda.low"
+        }
+      }
+    },
+    {
+      "id": "node-omni-mcp",
+      "type": "gateway",
+      "position": {
+        "x": 320,
+        "y": 140
+      },
+      "data": {
+        "label": "Omni MCP Server",
+        "technology": "Go 1.23 / mark3labs/mcp-go",
+        "description": "Bridge primária de entrada para protocolo MCP (stdio e SSE) com isolamento de stdout.",
+        "tier": "integration",
+        "executive": true,
+        "status": "completed",
+        "pricing": {
+          "complexity": "medium",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-omni-http",
+      "type": "gateway",
+      "position": {
+        "x": 320,
+        "y": 360
+      },
+      "data": {
+        "label": "Omni HTTP Gateway",
+        "technology": "Go 1.23 / net/http",
+        "description": "Bridge primária REST para OpenAI Function Calling (/v1/tools e /v1/tools/execute).",
+        "tier": "integration",
+        "executive": true,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-core-hub",
+      "type": "compute",
+      "position": {
+        "x": 620,
+        "y": 250
+      },
+      "data": {
+        "label": "Core Connectors Hub",
+        "technology": "Go 1.23 / Hexagonal Ports",
+        "description": "Contrato agnóstico core.Connector, registro centralizado, token budgeting e poda de payloads.",
+        "tier": "backend",
+        "tags": [
+          "critical"
+        ],
+        "executive": true,
+        "status": "completed",
+        "pricing": {
+          "complexity": "high",
+          "cloud_tier": "ecs.fargate.0.5"
+        }
+      }
+    },
+    {
+      "id": "node-conn-fathom",
+      "type": "compute",
+      "position": {
+        "x": 940,
+        "y": 60
+      },
+      "data": {
+        "label": "Fathom Connector",
+        "technology": "Go / Fathom Client",
+        "description": "Adapter para transcrições e resumos de gravações de reuniões do Fathom Video.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "medium",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-conn-whatsapp",
+      "type": "compute",
+      "position": {
+        "x": 940,
+        "y": 180
+      },
+      "data": {
+        "label": "WhatsApp Connector",
+        "technology": "Go / whatsmeow / Evolution",
+        "description": "Adapter para mensagens WhatsApp com persistência SQLite de sessão multidevice.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "medium",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-conn-slack",
+      "type": "compute",
+      "position": {
+        "x": 940,
+        "y": 300
+      },
+      "data": {
+        "label": "Slack Connector",
+        "technology": "Go / slack-go",
+        "description": "Adapter para canais, postagem e buscas no Slack via User Tokens ou Bot Tokens.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "medium",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-conn-mattermost",
+      "type": "compute",
+      "position": {
+        "x": 940,
+        "y": 420
+      },
+      "data": {
+        "label": "Mattermost Connector",
+        "technology": "Go / mattermost-server model",
+        "description": "Adapter para postagens e canais no Mattermost via Personal Access Token.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-conn-google",
+      "type": "compute",
+      "position": {
+        "x": 940,
+        "y": 540
+      },
+      "data": {
+        "label": "Google Workspace Connector",
+        "technology": "Go / google.golang.org/api",
+        "description": "Adapter para Gmail v1 e Google Drive v3 com OAuth2 local e refresh de token.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "medium",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-sqlite-session",
+      "type": "database",
+      "position": {
+        "x": 1260,
+        "y": 180
+      },
+      "data": {
+        "label": "SQLite Session Store",
+        "technology": "SQLite 3 / Local",
+        "description": "Persistência local de credenciais e chaves criptográficas do whatsmeow em ~/.config/omni-connectors/.",
+        "tier": "data",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "db.t4g.micro"
+        }
+      }
+    },
+    {
+      "id": "node-second-brain",
+      "type": "storage",
+      "position": {
+        "x": 1260,
+        "y": 60
+      },
+      "data": {
+        "label": "OS-Optimizer Second Brain",
+        "technology": "Markdown Vault / AI OS",
+        "description": "Base de conhecimento local (Context, Memory em Meetings/ e Projects, Action skills).",
+        "tier": "data",
+        "executive": true,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "s3.standard"
+        }
+      }
+    },
+    {
+      "id": "node-ext-fathom",
+      "type": "external_service",
+      "position": {
+        "x": 1260,
+        "y": -20
+      },
+      "data": {
+        "label": "Fathom Video API",
+        "technology": "HTTPS REST API",
+        "description": "API externa de gravações e transcrições do Fathom Video.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-ext-slack",
+      "type": "external_service",
+      "position": {
+        "x": 1260,
+        "y": 300
+      },
+      "data": {
+        "label": "Slack Web API",
+        "technology": "HTTPS REST API",
+        "description": "API externa do Slack para mensagens e canais.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-ext-mattermost",
+      "type": "external_service",
+      "position": {
+        "x": 1260,
+        "y": 420
+      },
+      "data": {
+        "label": "Mattermost Server API",
+        "technology": "Client4 REST API",
+        "description": "Instância remota da API do Mattermost.",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    },
+    {
+      "id": "node-ext-google",
+      "type": "external_service",
+      "position": {
+        "x": 1260,
+        "y": 540
+      },
+      "data": {
+        "label": "Google Cloud APIs",
+        "technology": "Gmail \u0026 Drive REST",
+        "description": "APIs externas do Google Workspace (Gmail v1 e Drive v3).",
+        "tier": "integration",
+        "executive": false,
+        "status": "completed",
+        "pricing": {
+          "complexity": "low",
+          "cloud_tier": "cloud_run.small"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-clients-to-omni-mcp",
+      "source": "node-llm-clients",
+      "target": "node-omni-mcp",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "websocket",
+        "description": "Comunicação JSON-RPC 2.0 via stdio ou SSE",
+        "complexity": "medium"
+      }
+    },
+    {
+      "id": "edge-clients-to-omni-http",
+      "source": "node-llm-clients",
+      "target": "node-omni-http",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "port": 8080,
+        "description": "Endpoints HTTP REST para OpenAI Function Calling",
+        "endpoints": [
+          "get-api-v1-tools",
+          "post-api-v1-tools-execute",
+          "get-api-v1-health"
+        ],
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-mcp-to-core",
+      "source": "node-omni-mcp",
+      "target": "node-core-hub",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Despacho in-process de chamadas MCP para core.ToolDefinition",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-http-to-core",
+      "source": "node-omni-http",
+      "target": "node-core-hub",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Despacho in-process de Function Calling para core.ToolDefinition",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-sqlite",
+      "source": "node-core-hub",
+      "target": "node-sqlite-session",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "sql",
+        "description": "Configurações e sessões locais",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-fathom",
+      "source": "node-core-hub",
+      "target": "node-conn-fathom",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Invocação interna do conector Fathom",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-whatsapp",
+      "source": "node-core-hub",
+      "target": "node-conn-whatsapp",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Invocação interna do conector WhatsApp",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-slack",
+      "source": "node-core-hub",
+      "target": "node-conn-slack",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Invocação interna do conector Slack",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-mattermost",
+      "source": "node-core-hub",
+      "target": "node-conn-mattermost",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Invocação interna do conector Mattermost",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-core-to-google",
+      "source": "node-core-hub",
+      "target": "node-conn-google",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Invocação interna do conector Google",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-fathom-to-ext",
+      "source": "node-conn-fathom",
+      "target": "node-ext-fathom",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "port": 443,
+        "description": "Chamada HTTP à API externa do Fathom",
+        "complexity": "medium"
+      }
+    },
+    {
+      "id": "edge-fathom-to-second-brain",
+      "source": "node-conn-fathom",
+      "target": "node-second-brain",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "description": "Alimentação direta de transcrições e atas em Meetings/ e Projects/",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-whatsapp-to-sqlite",
+      "source": "node-conn-whatsapp",
+      "target": "node-sqlite-session",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "sql",
+        "description": "Persistência de sessão SQLite multidevice",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-slack-to-ext",
+      "source": "node-conn-slack",
+      "target": "node-ext-slack",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "port": 443,
+        "description": "Chamadas REST à API do Slack",
+        "complexity": "medium"
+      }
+    },
+    {
+      "id": "edge-mattermost-to-ext",
+      "source": "node-conn-mattermost",
+      "target": "node-ext-mattermost",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "port": 443,
+        "description": "Chamadas Client4 REST ao Mattermost",
+        "complexity": "low"
+      }
+    },
+    {
+      "id": "edge-google-to-ext",
+      "source": "node-conn-google",
+      "target": "node-ext-google",
+      "type": "smoothstep",
+      "animated": false,
+      "data": {
+        "protocol": "rest",
+        "port": 443,
+        "description": "Chamadas REST às APIs Gmail e Drive",
+        "complexity": "medium"
+      }
+    }
+  ]
+}

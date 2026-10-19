@@ -1,0 +1,54 @@
+# Convenções do projeto: planejamento, Git, pull requests e autonomia da IA.
+# Lidas pelo ArchCode Studio, pelos hooks do Git e pela CI (`archcode-studio git lint`).
+# Marcadores: {sprint} {id} {slug} {summary} {title} {kind} {type} {version}.
+preset: archcode-sprint
+language: pt-BR
+planning:
+  sprint_days: 10
+  slicing: hybrid
+  stale_days: 3
+git:
+  main_branch: main
+  remote: origin
+  branch: sprint-{sprint}/{id}-{slug}
+  branch_off_sprint: '{kind}/{id}-{slug}'
+  commit: Sprint {sprint} - {summary} [{id}]
+  commit_off_sprint: '{kind} - {summary} [{id}]'
+  off_sprint_kinds:
+    - Hotfix
+    - Chore
+  max_subject: 72
+  verbs:
+    - Implementa
+    - Corrige
+    - Refatora
+    - Testa
+    - Documenta
+    - Configura
+    - Remove
+    - Adiciona
+    - Atualiza
+    - Cria
+    - Ajusta
+    - Melhora
+    - Reserva
+    - Investiga
+    - Protege
+    - Migra
+    - Otimiza
+    - Integra
+    - Publica
+    - Prepara
+  require_id: true
+  branch_exempt:
+    - dependabot/*
+    - renovate/*
+pull_request:
+  title: Sprint {sprint} - {title} [{id}]
+  granularity: task
+  merge_strategy: squash
+tags:
+  sprint: sprint-{sprint}
+  release: v{version}
+ai:
+  autonomy: assistido
