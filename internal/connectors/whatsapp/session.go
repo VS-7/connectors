@@ -1,18 +1,24 @@
 package whatsapp
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
+
+	_ "github.com/mattn/go-sqlite3"
+	"go.mau.fi/whatsmeow/store/sqlstore"
+	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
-// SessionConfig gerencia o caminho e configuração do banco SQLite de sessão local.
-type SessionConfig struct {
-	DBPath string
+// SessionManager gerencia a persistência de sessão e criptografia em SQLite.
+type SessionManager struct {
+	DBPath    string
+	Container *sqlstore.Container
 }
 
-// DefaultSessionConfig localiza o arquivo em ~/.config/omni-connectors/whatsapp.db
-func DefaultSessionConfig() (*SessionConfig, error) {
+// NewSessionManager conecta ou inicializa o banco SQLite em ~/.config/omni-connectors/whatsapp_session.db
+func NewSessionManager() (*SessionManager, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, fmt.Errorf("impossível determinar diretório do usuário: %w", err)
@@ -24,5 +30,15 @@ func DefaultSessionConfig() (*SessionConfig, error) {
 	}
 
 	dbPath := filepath.Join(configDir, "whatsapp_session.db")
-	return &SessionConfig{DBPath: dbPath}, nil
+	dsn := fmt.Sprintf("file:%s?_foreign_keys=on", dbPath)
+
+	container, err := sqlstore.New(context.Background(), "sqlite3", dsn, waLog.Noop)
+	if err != nil {
+		return nil, fmt.Errorf("falha ao inicializar banco SQLite do whatsmeow: %w", err)
+	}
+
+	return &SessionManager{
+		DBPath:    dbPath,
+		Container: container,
+	}, nil
 }
