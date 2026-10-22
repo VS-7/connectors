@@ -72,7 +72,7 @@ claude)
   mkdir -p "$(dirname "$MCP_BIN")" "$HOME/.claude/skills"
   (cd "$REPO" && go build -o "$MCP_BIN" ./cmd/omni-mcp)
   claude mcp remove -s user omni >/dev/null 2>&1 || true
-  claude mcp add -s user -e OMNI_WA_READONLY=on omni -- "$MCP_BIN" -enable whatsapp
+  claude mcp add -s user omni -e OMNI_WA_READONLY=on -- "$MCP_BIN" -enable whatsapp
   rm -rf "$HOME/.claude/skills/$SKILL"
   cp -R "$REPO/OS-Optimizer-Playbook/skills/$SKILL" "$HOME/.claude/skills/$SKILL"
   echo "omni-mcp e skill $SKILL instalados — valem nas próximas sessões do Claude Code"
