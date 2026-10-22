@@ -21,3 +21,4 @@ See [[GEMINI.md]] for the full 3-layer architecture, navigation routing table, a
 | Settled Decisions | `Decisions/` |
 | Vault Optimizer Skill | `skills/optimizer/SKILL.md` |
 | Meeting Intelligence Skill | `skills/meeting-intelligence/SKILL.md` |
+| WhatsApp Context Skill | `skills/whatsapp-contexto/SKILL.md` |

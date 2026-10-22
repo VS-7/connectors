@@ -34,6 +34,7 @@ When answering questions or performing tasks, follow this routing path:
 | Daily scratchpad, running logs | `Daily/` | `Daily/README.md` |
 | Audit, optimize, or reorganize this vault | `skills/optimizer/` | `skills/optimizer/SKILL.md` |
 | Process a raw meeting transcript into actions | `skills/meeting-intelligence/` | `skills/meeting-intelligence/SKILL.md` |
+| WhatsApp context: what clients said, pending items, daily recap, sending | `skills/whatsapp-contexto/` | `skills/whatsapp-contexto/SKILL.md` |
 | Initial setup or updating company baseline | `skills/second-brain-onboarding/` | `skills/second-brain-onboarding/SKILL.md` |
 
 ---
