@@ -13,6 +13,7 @@ import (
 
 // SessionManager gerencia a persistência de sessão e criptografia em SQLite.
 type SessionManager struct {
+	ConfigDir string
 	DBPath    string
 	Container *sqlstore.Container
 }
@@ -30,7 +31,8 @@ func NewSessionManager() (*SessionManager, error) {
 	}
 
 	dbPath := filepath.Join(configDir, "whatsapp_session.db")
-	dsn := fmt.Sprintf("file:%s?_foreign_keys=on", dbPath)
+	// WAL + _txlock=immediate evitam SQLITE_BUSY nas escritas concorrentes logo após o pareamento.
+	dsn := fmt.Sprintf("file:%s?_foreign_keys=on&_journal_mode=WAL&_busy_timeout=10000&_txlock=immediate", dbPath)
 
 	container, err := sqlstore.New(context.Background(), "sqlite3", dsn, waLog.Noop)
 	if err != nil {
@@ -38,6 +40,7 @@ func NewSessionManager() (*SessionManager, error) {
 	}
 
 	return &SessionManager{
+		ConfigDir: configDir,
 		DBPath:    dbPath,
 		Container: container,
 	}, nil
